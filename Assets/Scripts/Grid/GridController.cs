@@ -34,6 +34,7 @@ public class GridController
         }
 
         FillRandomTiles();
+        SetBoundaryTiles();
     }
 
     private void FillRandomTiles()
@@ -43,7 +44,7 @@ public class GridController
         {
             int row = Random.Range(0, gridSize);
             int column = Random.Range(0, gridSize);
-            if (GetTile(row, column) == GetTile((gridSize + 1) / 2, (gridSize + 1) / 2))
+            if (GetTile(row, column) == GetTile(GridTiles.GetLength(0) / 2, GridTiles.GetLength(1) / 2))
                 continue;
 
             GetTile(row, column).TileModel.SetTileState(TileState.FILLED);
@@ -76,38 +77,19 @@ public class GridController
         {
             boundaryTiles.Add(GetTile(0, i));
         }
-
-        foreach (TileController tile in boundaryTiles)
-        {
-            tile.TileModel.SetTileState(TileState.BOUNDARY);
-        }
-
         return boundaryTiles;
     }
 
-    public TileController GetTile(int row, int column) => GridTiles[row, column];
-
-    public TileController GetClosestBoundaryTile(Vector2Int currentPosition)
+    private void SetBoundaryTiles()
     {
-        TileController closestBoundaryTile = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (var tile in GridTiles)
+        foreach (TileController tile in GetBoundaryTiles())
         {
-            if (tile.TileModel.TileState == TileState.BOUNDARY)
-            {
-                float distanceToTile = Vector2Int.Distance(tile.TileModel.GridPosition, currentPosition);
-                if (distanceToTile < closestDistance)
-                {
-                    closestBoundaryTile = tile;
-                    closestDistance = distanceToTile;
-                }
-            }
+            if (tile.TileModel.TileState != TileState.FILLED)
+                tile.TileModel.SetTileState(TileState.BOUNDARY);
         }
-
-        return closestBoundaryTile;
     }
 
+    public TileController GetTile(int row, int column) => GridTiles[row, column];
 
     public void DisposeTile()
     {

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         eventService = new EventService();
         commandInvoker = new CommandInvoker();
         gridController = new GridController(gridView, gridSO, commandInvoker, eventService);
-        catController = new CatController(catView, new Vector2Int(5, 5), gridController, eventService);
+        catController = new CatController(catView, new Vector2Int(5, 5), gridController, commandInvoker, eventService);
     }
     private void Start()
     {

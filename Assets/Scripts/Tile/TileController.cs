@@ -8,7 +8,6 @@ public class TileController : IDisposable
     public TileView TileView { get; private set; }
     private CommandInvoker commandInvoker;
     private EventService eventService;
-    private Coroutine OnTileClickCoroutine;
     public TileController(TileSO tileSO, Vector3 position, Transform parentTransform, CommandInvoker commandInvoker, Vector2Int gridPosition, EventService eventService) 
     {
         this.eventService = eventService;
@@ -33,19 +32,8 @@ public class TileController : IDisposable
 
     public void OnTileClick(TileController tileController)
     {
-        if (OnTileClickCoroutine != null)
-        {
-            TileView.StopCoroutine(OnTileClickCoroutine);
-        }
-        OnTileClickCoroutine = TileView.StartCoroutine(OnTileClickEnumerator(tileController));
-    }
-
-    private IEnumerator OnTileClickEnumerator(TileController tileController)
-    {
         TileUnit tileClickCommand = new TileClickCommand(tileController);
         commandInvoker.ProcessCommand(tileClickCommand as ICommand);
-
-        yield return new WaitForSeconds(2f);
     }
 
     public Vector2 GetTileCenter() => TileView.GetTileCenter();
