@@ -4,7 +4,13 @@ public class TileView : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
     public TileController TileController { get; private set; }
-    public void Init(TileController tileController) => this.TileController = tileController;
+    private EventService eventService;
+    public void Init(TileController tileController, EventService eventService)
+    {
+        this.TileController = tileController;
+        this.eventService = eventService;
+    }
     public void ChangeSpriteColor(Color color) => spriteRenderer.color = color;
-    private void OnMouseDown() => TileController.OnTileClick();
+    public Vector2 GetTileCenter() => (Vector2)spriteRenderer.bounds.center;
+    private void OnMouseDown() => eventService.OnTileClick.Invoke(TileController);
 }

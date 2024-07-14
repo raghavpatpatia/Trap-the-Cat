@@ -2,5 +2,6 @@
 {
     EMPTY,
     FILLED,
-    OCCUPIED
+    OCCUPIED,
+    BOUNDARY
 }
