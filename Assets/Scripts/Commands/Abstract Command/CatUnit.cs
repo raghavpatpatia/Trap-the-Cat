@@ -51,7 +51,6 @@ public abstract class CatUnit : ICommand
             tile.TileView.ChangeSpriteColor(tile.TileModel.OccupiedTileColor);
 
             catController.CatView.transform.position = tile.GetTileCenter();
-            catController.EventService.CheckForLoseCondition.Invoke();
         }
         else
         {

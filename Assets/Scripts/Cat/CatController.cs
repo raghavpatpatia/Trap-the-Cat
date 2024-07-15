@@ -40,6 +40,7 @@ public class CatController : IDisposable
             CurrentTargetTile = grid.GetRandomBoundaryTile();
         }
         MoveCat();
+        EventService.CheckForLoseCondition.Invoke();
     }
 
     private void MoveCat()
