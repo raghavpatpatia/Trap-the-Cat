@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CatController : IDisposable
 {
     public CatView CatView { get; private set; }
     public CatModel CatModel { get; private set; }
+    public EventService EventService { get; private set; }
     public TileController CurrentTargetTile { get; set; }
     private CommandInvoker commandInvoker;
     private GridController grid;
-    private EventService eventService;
+    private CatMovementDirections movementDirections;
 
     public CatController(CatView catView, Vector2Int initialPosition, GridController grid, CommandInvoker commandInvoker, EventService eventService)
     {
@@ -17,15 +19,18 @@ public class CatController : IDisposable
         this.CatView = GameObject.Instantiate(catView);
         this.grid = grid;
         this.commandInvoker = commandInvoker;
-        this.CatView.transform.position = this.grid.GetTile(initialPosition.x, initialPosition.y).GetTileCenter();
-        this.grid.GetTile(initialPosition.x, initialPosition.y).TileModel.SetTileState(TileState.OCCUPIED);
-        this.eventService = eventService;
+        this.movementDirections = new CatMovementDirections();
+        TileController initialTile = this.grid.GetTile(initialPosition.x, initialPosition.y);
+        this.CatView.transform.position = initialTile.GetTileCenter();
+        initialTile.TileModel.SetTileState(TileState.OCCUPIED);
+        initialTile.TileView.ChangeSpriteColor(initialTile.TileModel.OccupiedTileColor);
+        this.EventService = eventService;
         SubscribeEvent();
     }
 
     private void SubscribeEvent()
     {
-        eventService.OnTileClick.AddListener(OnTileClick);
+        EventService.OnTileClick.AddListener(OnTileClick);
     }
 
     private void OnTileClick(TileController clickedTile)
@@ -54,8 +59,11 @@ public class CatController : IDisposable
         return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
     }
 
+    public List<Vector2Int> GetDirection() => movementDirections.GetDirections();
+    public List<Vector2Int> GetCardinalDirection() => movementDirections.CardinalDirections();
+
     public void Dispose()
     {
-        eventService.OnTileClick.RemoveListener(OnTileClick);
+        EventService.OnTileClick.RemoveListener(OnTileClick);
     }
 }

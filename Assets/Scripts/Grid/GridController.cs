@@ -85,10 +85,15 @@ public class GridController
         foreach (TileController tile in GetBoundaryTiles())
         {
             if (tile.TileModel.TileState != TileState.FILLED)
+            {
                 tile.TileModel.SetTileState(TileState.BOUNDARY);
+            }
         }
     }
-
+    public bool IsWithinGridBounds(int x, int y)
+    {
+        return x >= 0 && x < GridTiles.GetLength(0) && y >= 0 && y < GridTiles.GetLength(1);
+    }
     public TileController GetTile(int row, int column) => GridTiles[row, column];
 
     public void DisposeTile()

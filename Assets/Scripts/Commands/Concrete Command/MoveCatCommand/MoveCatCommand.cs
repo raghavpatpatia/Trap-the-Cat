@@ -9,20 +9,28 @@ public class MoveCatCommand : CatUnit
     {
         MoveCat();
     }
+
     private void MoveCat()
     {
         if (catController.CurrentTargetTile == null)
             catController.CurrentTargetTile = gridController.GetRandomBoundaryTile();
+
         List<TileController> possibleTilesToMove = GetPossibleMoves();
         Vector2Int closestDirection = GetClosestDirection();
-        if (possibleTilesToMove.Contains(gridController.GetTile(catController.CatModel.CurrentPosition.x + closestDirection.x, catController.CatModel.CurrentPosition.y + closestDirection.y)))
+
+        if (possibleTilesToMove.Count > 0)
         {
-            MoveCatToTile(gridController.GetTile(catController.CatModel.CurrentPosition.x + closestDirection.x, catController.CatModel.CurrentPosition.y + closestDirection.y));
+            if (possibleTilesToMove.Contains(gridController.GetTile(catController.CatModel.CurrentPosition.x + closestDirection.x, catController.CatModel.CurrentPosition.y + closestDirection.y)))
+            {
+                List<TileController> nextTilesToMove = NextTilesToMove(gridController.GetTile(catController.CatModel.CurrentPosition.x + closestDirection.x, catController.CatModel.CurrentPosition.y + closestDirection.y));
+                MoveCatToTile(nextTilesToMove[0]);
+            }
+            else
+            {
+                catController.CurrentTargetTile = gridController.GetRandomBoundaryTile();
+                MoveCatToTile(possibleTilesToMove[Random.Range(0, possibleTilesToMove.Count)]);
+            }
         }
-        else
-        {
-            catController.CurrentTargetTile = gridController.GetRandomBoundaryTile();
-            MoveCatToTile(possibleTilesToMove[Random.Range(0, possibleTilesToMove.Count)]);
-        }
+        catController.EventService.CheckForWinCondition.Invoke();
     }
 }

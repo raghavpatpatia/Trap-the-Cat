@@ -6,4 +6,5 @@ public class TileSO : ScriptableObject
     public TileView TileView;
     public Color EmptyTile;
     public Color FilledTile;
+    public Color OccupiedTile;
 }

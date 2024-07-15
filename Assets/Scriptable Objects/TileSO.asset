@@ -15,3 +15,4 @@ MonoBehaviour:
   TileView: {fileID: 5521571850577000572, guid: 39d1a33ff11b1c44f95f9b8916de50ef, type: 3}
   EmptyTile: {r: 0.6323038, g: 0.8113208, b: 0, a: 1}
   FilledTile: {r: 0.31009024, g: 0.3962264, b: 0, a: 1}
+  OccupiedTile: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
